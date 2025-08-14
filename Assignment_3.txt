@@ -1,0 +1,85 @@
+.model small
+.stack 100h
+.data
+msg1 db "Enter character: $"
+msg2 db 10,13,"Changed to uppercase: $"
+msg3 db 10,13,"Not a letter$"
+msg4 db 10,13,"Enter hexadecimal digit: $"
+msg5 db 10,13,"Original and modified values are equal.$"
+msg6 db 10,13,"Original and modified values are not equal.$"
+num db ?
+
+.code
+main proc
+    
+    mov ax, @data
+    mov ds, ax
+
+    
+    mov ah, 09h
+    lea dx, msg1
+    int 21h
+    mov ah, 01h
+    int 21h
+    mov num, al
+
+   
+    mov al, num
+    cmp al, 'a'
+    jl not_lowercase
+    cmp al, 'z'
+    jg not_lowercase
+    xor al, 20h
+    mov num, al
+
+
+not_lowercase:
+
+    mov ah, 09h
+    lea dx, msg2
+    int 21h
+    mov dl, num
+    mov ah, 02h
+    int 21h
+
+  
+    mov al, num
+    test al, 01h
+    jz even
+odd:
+  
+    jmp done
+even:
+    
+done:
+
+    
+    mov ah, 09h
+    lea dx, msg4
+    int 21h
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov bl, al
+
+ 
+    and al, 0F0h
+
+  
+    xor al, bl
+    jz equal
+not_equal:
+    mov ah, 09h
+    lea dx, msg6
+    int 21h
+    jmp exit
+equal:
+    mov ah, 09h
+    lea dx, msg5
+    int 21h
+
+exit:
+    mov ah, 4Ch
+    int 21h
+main endp
+end main
