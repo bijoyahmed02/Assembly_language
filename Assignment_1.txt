@@ -1,0 +1,191 @@
+Problem-1
+
+.MODEL SMALL
+.STACK 100H
+.DATA
+    msg1 DB 'Enter first number: $'
+    msg2 DB 13,10,'Enter second number: $'
+    msg_sorted DB 13,10,'Sorted numbers are: $'
+    num1 DB ?
+    num2 DB ?
+ 
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+ 
+    ; Ask for first number
+    LEA DX, msg1
+    MOV AH, 9
+    INT 21H
+ 
+    ; Read first number
+    MOV AH, 1    ; Function 1 = input character
+    INT 21H
+    SUB AL, 30H  ; Convert ASCII to numeric
+    MOV num1, AL
+ 
+    ; Ask for second number
+    LEA DX, msg2
+    MOV AH, 9
+    INT 21H
+ 
+    ; Read second number
+    MOV AH, 1
+    INT 21H
+    SUB AL, 30H
+    MOV num2, AL
+ 
+    ; Load numbers
+    MOV AL, num1
+    MOV BL, num2
+ 
+    ; Compare and swap if needed
+    CMP AL, BL
+    JBE SKIP_SWAP
+ 
+    ; Swap
+    XCHG AL, BL
+ 
+SKIP_SWAP:
+    ; Store sorted back
+    MOV num1, AL
+    MOV num2, BL
+ 
+    ; Display sorted numbers
+    LEA DX, msg_sorted
+    MOV AH, 9
+    INT 21H
+ 
+    ; Display first number
+    MOV DL, num1
+    ADD DL, 30H ; Numeric to ASCII
+    MOV AH, 2
+    INT 21H
+ 
+    ; Space
+    MOV DL, ' '
+    INT 21H
+ 
+    ; Display second number
+    MOV DL, num2
+    ADD DL, 30H
+    MOV AH, 2
+    INT 21H
+ 
+    ; Exit program
+    MOV AH, 4CH
+    INT 21H
+MAIN ENDP
+END MAIN
+………………
+Problem2
+……………
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1 DB 'Enter the number: $'
+    MSGI DB 13,10,'Inside$'
+    MSGO DB 13,10,'Outside$'
+    NUM DB ?
+ 
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+ 
+    LEA DX, msg1
+    MOV AH, 9
+    INT 21H
+ 
+   
+    MOV AH, 1
+    INT 21H
+    SUB AL, 30H
+    MOV BL, AL      
+ 
+    
+    MOV AH, 1
+    INT 21H
+    SUB AL, 30H
+    MOV BH, AL         
+ 
+   
+    MOV AL, BL
+    MOV CL, 10
+    MUL CL              ; AL = BL * 10
+    ADD AL, BH          ; AL = (BL * 10) + BH
+    MOV NUM, AL        
+ 
+    MOV AL, NUM            
+    CMP AL, 20
+    JLE outside_label   
+    CMP AL, 30
+    JGE outside_label   
+ 
+inside_label:
+    LEA DX, MSGI
+    MOV AH, 9
+    INT 21H
+    JMP EXID
+ 
+outside_label:
+    LEA DX, MSGO
+    MOV AH, 9
+    INT 21H
+ 
+EXID:
+    MOV AH, 4CH
+    INT 21H
+ 
+MAIN ENDP
+END MAIN
+…………………
+Problem3
+………………
+
+.MODEL SMALL
+.STACK 100H
+.DATA
+    NUM DB ? 
+    MSG DB 'The absolute value is: $'    
+    ABSOLUTE DB ?   
+
+.CODE
+MAIN PROC
+    MOV AX, @DATA    
+    MOV DS, AX 
+    
+    MOV AH,1
+    INT 21H
+    SUB AL,30H
+    MOV NUM,AL
+
+    MOV AL, NUM
+    CMP AL, 0        
+    JGE NOT_NEGATIVE
+    NEG AL  
+              
+NOT_NEGATIVE:
+   
+    MOV ABSOLUTE, AL
+
+   
+    MOV AH, 9        
+    LEA DX, MSG     
+    INT 21H
+
+   
+    MOV DL, ABSOLUTE 
+    ADD DL, 30H      
+    MOV AH, 2       
+    INT 21H
+
+  
+    MOV AH, 4CH     
+    INT 21H
+
+MAIN ENDP
+
+END MAIN
+
