@@ -1,0 +1,1069 @@
+PasswordCheck
+;---------------------------------------------------
+;----------------------QUESTION---------------------
+;---------------------------------------------------
+
+;  Write a program to check password using Assembly Programming. Suppose the password is mypassword 
+; Sample output 
+; Enter your password: 123
+; Password Matched 
+; Enter your password: 235 
+; Password Not Matched
+
+
+;---------------------------------------------------
+;-----------------------ANSWER----------------------
+;---------------------------------------------------
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+     MSG DB "ENTER YOUR PASSWORD: $"
+     RIGHT DB 10, 13, "PASSWORD MATCHED$"
+     WRONG DB 10, 13, "PASSWORD NOT MATCH$"
+
+.CODE
+    MAIN PROC    
+        MOV AX, @DATA
+        MOV DS, AX 
+                        
+        
+        ;PRINT MESSAGE
+        MOV AH, 9
+        LEA DX, MSG
+        INT 21H
+        
+        ;READ 1ST CHARACTER
+        MOV AH, 1
+        INT 21H
+        MOV BH, AL
+                  
+                  
+        ; READ 2ND CHARACTER
+        MOV AH, 1                               
+        INT 21H
+        MOV BL, AL                                             
+        
+                   
+        ; READ 3RD CHARACTER
+        MOV AH, 1
+        INT 21H
+        MOV CL, AL
+                  
+        ; CHECK 1ST CHAR
+        CMP BH, 31H
+        JNE WRONG_PASS
+        
+        ; CHECK 2ND CHAR
+        CMP BL, 32H
+        JNE WRONG_PASS
+        
+        ; CHECK 3RD CHAR
+        CMP CL, 33H
+        JNE WRONG_PASS;
+        JE RIGHT_PASS;
+        
+        
+        RIGHT_PASS:
+            MOV AH, 9
+            LEA DX, RIGHT
+            INT 21H  
+            JMP END
+            
+        
+        WRONG_PASS:
+            MOV AH, 9
+            LEA DX, WRONG
+            INT 21H
+            JMP END
+        
+    
+        ; Exit  
+        END:
+            MOV AH, 4CH
+            INT 21H
+    
+    
+    MAIN ENDP
+END
+
+
+16. CompareThree
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    MSG1 DB "ENTER THE 1ST NUMBER: $"
+    MSG2 DB "ENTER THE 2ND NUMBER: $"
+    MSG3 DB "ENTER THE 3RD NUMBER: $"
+    
+    A DB ?
+    B DB ?
+    C DB ?
+    
+    MSGH DB "HIGHEST: $"
+    MSGM DB "MIDDLE : $"
+    MSGL DB "LOWEST : $"
+    
+    NEWLINE DB 13, 10, "$"
+
+.CODE
+    MAIN PROC
+        MOV AX, @DATA
+        MOV DS, AX
+    
+        ; INPUT 1ST NUMBER
+        MOV AH, 9
+        LEA DX, MSG1
+        INT 21H
+        
+        MOV AH, 1
+        INT 21H
+        MOV A, AL
+        
+        
+        ; NEWLINE
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+        
+        
+        ; INPUT 2ND NUMBER
+        MOV AH, 9
+        LEA DX, MSG2
+        INT 21H
+        
+        MOV AH, 1
+        INT 21H
+        MOV B, AL
+        
+        
+        ; NEWLINE
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+        
+        
+        ; INPUT 3RD NUMBER
+        MOV AH, 9
+        LEA DX, MSG3
+        INT 21H
+        
+        MOV AH, 1
+        INT 21H
+        MOV C, AL
+                   
+                   
+        ; NEWLINE 
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+        
+                ;=======COMPARE======
+        ; A ? B
+        MOV BH, A
+        MOV BL, B
+        CMP BH, BL 
+        JG AB_DONE
+        ; IF A < B THEN EXCHANGE
+        MOV A, BL
+        MOV B, BH
+        
+    AB_DONE:
+        ; A ? C
+        MOV BH, A
+        MOV BL, C
+        CMP BH, BL
+        JG AC_DONE
+        ; IF A < C THEN EXCHANGE
+        MOV A, BL
+        MOV C, BH
+        
+    AC_DONE:
+        ; B ? C
+        MOV BH, B
+        MOV BL, C
+        CMP BH, BL
+        JG BC_DONE
+        ; IF B < C THEN EXCHANGE
+        MOV B, BL
+        MOV C, BH
+        
+    BC_DONE:
+
+    ; =======OUTPUT=======
+        ; HIGHEST
+        MOV AH, 9
+        LEA DX, MSGH
+        INT 21H
+
+        MOV AH, 2
+        MOV DL, A
+        INT 21H
+
+        ; NEWLINE
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+
+        ; MIDDLE
+        MOV AH, 9
+        LEA DX, MSGM
+        INT 21H
+
+        MOV AH, 2
+        MOV DL, B
+        INT 21H
+
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+
+        ; LOWEST
+        MOV AH, 9
+        LEA DX, MSGL
+        INT 21H
+
+        MOV AH, 2
+        MOV DL, C
+        INT 21H
+    MAIN ENDP
+END
+
+17. Sort3Char
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    MSG1 DB "ENTER THE 1ST CHAR: $"
+    MSG2 DB "ENTER THE 2ND CHAR: $"
+    MSG3 DB "ENTER THE 3RD CHAR: $"
+    
+    NEWLINE DB 10, 13, "$" 
+    
+    MSGH DB "1ST CHAR: $"
+    MSGM DB "2ND CHAR: $"
+    MSGL DB "3RD CHAR: $"
+    
+    
+.CODE
+    MAIN PROC
+        MOV AX, @DATA
+        MOV DS, AX
+        
+        ; INPUT 1ST CHAR
+        MOV AH, 9
+        LEA DX, MSG1
+        INT 21H
+        
+        MOV AH, 1 
+        INT 21H
+        MOV BH, AL
+        
+        ; NEWLINE
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+        
+        
+        ; INPUT 2D CHAR
+        MOV AH, 9
+        LEA DX, MSG2
+        INT 21H
+        
+        MOV AH, 1
+        INT 21H
+        MOV BL, AL
+        
+        ; NEWLINE
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+        
+        
+        ; INPUT 3RD CHAR
+        MOV AH, 9
+        LEA DX, MSG3
+        INT 21H
+        
+        MOV AH, 1
+        INT 21H
+        MOV CH, AL
+        
+        
+        ; NEWLINE
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H
+        
+        ; USER INPUT: BH = 1ST CHAR, BL = 2ND CHAR, CH = 3RD CHAR
+        ;===================
+        ;     COMPARE
+        ;===================
+        
+        
+        ; BH ? BL
+        CMP BH, BL
+        JG BH_BL_DONE
+        XCHG BH, BL
+        
+        BH_BL_DONE:
+            ; BH ? CH
+            CMP BH, CH
+            JG BH_CH_DONE
+            XCHG BH, CH
+            
+        BH_CH_DONE:
+            ; BL ? CH
+            CMP BL, CH
+            JG PRINT_OUTPUT
+            XCHG BL, CH
+        
+        PRINT_OUTPUT:
+            ; NOW, BH = 1ST, BL = 2ND, CH = 3RD
+            ; PRINT 1ST CHAR
+            MOV AH, 9
+            LEA DX, MSGH 
+            INT 21H
+            
+            MOV AH, 2
+            MOV DL, BH
+            INT 21H
+            
+            ; NEWLINE
+            MOV AH, 9
+            LEA DX, NEWLINE
+            INT 21H
+            
+            
+            ; 2ND CHAR
+            MOV AH, 9
+            LEA DX, MSGM
+            INT 21H
+            
+            MOV AH, 2
+            MOV DL, BL
+            INT 21H
+            
+            ; NEWLINE
+            MOV AH, 9
+            LEA DX, NEWLINE
+            INT 21H
+            
+            
+            ; 3RD CHAR
+            MOV AH, 9
+            LEA DX, MSGL
+            INT 21H
+            
+            MOV AH, 2
+            MOV DL, CH
+            INT 21H  
+            
+            MOV AH, 4CH
+            INT 21H
+    MAIN ENDP
+END                           
+18. InputTypeCheck(Letter, Number or Special Char)
+;
+; WRITE AN ASSEMBLY PROGRAM TO READ A CHARACTER FROM THE USER AND DISPLAY WHETHER IT IS A DECIMAL DIGIT, A LETTER, OR A SPECIAL CHARACTER"
+; SMAPLE:
+; INPUT: A
+; OUTPUT: A, IT IS A LETTER
+; INPUT: 8
+; OUTPUT: 8, IT IS A DIGIT
+; INPUT: )
+; OUTPUT: ), IT IS A SPECIAL CHARACTHER
+; =================================================================================================================================
+
+
+
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1 DB "INPUT: $"
+    MSG_DIGIT DB ", IT IS A DECIMAL NUMBER $"
+    MSG_LET DB ", IT IS A LETTER $"
+    MSG_SPE DB ", IT IS A SPECIAL CHARACTER $"
+    NEWLINE DB 10, 13, "$" 
+.CODE
+    MAIN PROC 
+        MOV AX, @DATA
+        MOV DS, AX
+        
+        ; INPUT VALUE
+        MOV AH, 9
+        LEA DX, MSG1
+        INT 21H
+        
+        MOV AH, 1
+        INT 21H 
+        MOV BL, AL
+        
+        ; NEWLINE
+        MOV AH, 9 
+        LEA DX, NEWLINE 
+        INT 21H 
+        
+        ; CHECK THE VALUE
+        ; IS NUMBER?
+        CMP BL, 30H
+        JL SPECIAL_CHAR
+        CMP BL, 39H
+        JG LETTER_UPPER
+         
+        ; DECISION: NUMBER
+         
+        MOV AH, 2
+        MOV DL, BL
+        INT 21H  
+        
+        MOV AH, 9 
+        LEA DX, MSG_DIGIT
+        INT 21H  
+        
+        JMP EXIT
+
+
+        LETTER_UPPER:
+            CMP BL, 41H 
+            JL SPECIAL_CHAR 
+            CMP BL, 5AH 
+            JG LETTER_LOWER  
+            
+            ; DECISION: LETTER
+            MOV AH, 2
+            MOV DL, BL
+            INT 21H  
+            
+            MOV AH, 9 
+            LEA DX, MSG_LET
+            INT 21H  
+            
+            JMP EXIT
+            
+         LETTER_LOWER:
+            CMP BL, 61H 
+            JL SPECIAL_CHAR 
+            CMP BL, 7AH 
+            JG SPECIAL_CHAR 
+             
+            ; DECISION: LETTER
+            MOV AH, 2
+            MOV DL, BL
+            INT 21H  
+            
+            MOV AH, 9 
+            LEA DX, MSG_LET
+            INT 21H  
+            
+            JMP EXIT
+
+        SPECIAL_CHAR:
+            ; DECISION: SPECITAL CHAR
+            MOV AH, 2
+            MOV DL, BL
+            INT 21H  
+            
+            MOV AH, 9 
+            LEA DX, MSG_SPE
+            INT 21H  
+            
+
+        EXIT: 
+            MOV AH, 4CH
+            INT 21H 
+    MAIN ENDP
+END
+19. CheckCapitalLetter
+; Question:
+; Write a program that takes a single character input from the user. If the character is a capital English letter (A–Z), print the character. Otherwise, the program should terminate without printing anything.
+
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    NEWLINE DB 10, 13, "$"
+
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+
+    MOV AH, 1
+    INT 21H
+    MOV BL, AL 
+
+
+    MOV AH, 9
+    LEA DX, NEWLINE
+    INT 21H
+
+
+    CMP BL, 41H
+    JL EXIT
+    CMP BL, 5AH
+    JG EXIT
+
+
+    MOV AH, 2
+    MOV DL, BL
+    INT 21H
+
+EXIT:
+    MOV AH, 4CH
+    INT 21H
+MAIN ENDP
+END 
+20. OddEvenCheck
+; Question:
+; Write a program to take a numeric input between 1 and 4 from the user. If the input is odd (1 or 3), print "O"; if the input is even (2 or 4), print "E".
+
+
+
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    NEWLINE DB 10, 13, "$"
+    VO DB "O$"
+    VE DB "E$"
+
+.CODE
+MAIN PROC
+    MOV AX, @DATA
+    MOV DS, AX
+
+
+    MOV AH, 1
+    INT 21H
+    MOV BL, AL
+
+
+    MOV AH, 9
+    LEA DX, NEWLINE
+    INT 21H
+
+
+    CMP BL, 31H
+    JE O
+    CMP BL, 33H
+    JE O
+
+    CMP BL, 32H
+    JE E
+    CMP BL, 34H
+    JE E
+    
+    JMP EXIT
+
+    O:
+        MOV AH,9
+        LEA DX, VO
+        INT 21H
+        JMP EXIT
+
+    E:
+        MOV AH, 9
+        LEA DX, VE
+        INT 21H
+
+    EXIT:
+        MOV AH, 4CH
+        INT 21H
+MAIN ENDP
+END
+
+
+21.
+; Question
+; Write a program that prints all 256 ASCII characters (from 0 to 255) using a loop. Use BL register as a counter.
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+
+.CODE
+    MAIN PROC
+        MOV AX, @DATA
+        MOV DS, AX
+        
+        MOV BL, 0
+    
+        PRINT_LOOP:
+            MOV DL, BL
+            MOV AH, 2
+            INT 21H
+        
+            INC BL
+            CMP BL, 0
+            JNZ PRINT_LOOP
+        
+        
+            MOV AH, 4CH
+            INT 21H
+    MAIN ENDP
+END 
+
+22.
+; Question:
+; Write a program that calculates the sum of the following arithmetic series for 5 terms:
+; 1 + 5 + 9 + 13 + 17
+; Store the result in a variable and terminate the program.
+
+
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    A DW ?
+.CODE
+    MAIN PROC
+        MOV AX, @DATA
+        MOV DS, AX
+        
+        MOV AX, 0
+        MOV BX, 1
+        MOV CX, 5   ; IF USE LOOP AND ALSO VALUE STORE IN CX THEN LOOP AUTOMATICALLY DECRIES THE CX
+       
+        SUMM:
+           ADD AX, BX
+           ADD BX, 4
+           
+           MOV A, AX 
+           LOOP SUMM
+        
+        
+            MOV AH, 4CH
+            INT 21H
+    MAIN ENDP
+END 
+
+23.
+; Question:
+; Write a program that calculates the sum of a series where:
+; Start from 100, and subtract 5 for each next term for a total of 20 terms.
+; Example: 100 + 95 + 90 + ...
+; Store the result in a variable and terminate the program.
+
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+    A DW ?
+.CODE
+    MAIN PROC
+        MOV AX, @DATA
+        MOV DS, AX
+        
+        MOV AX, 0
+        MOV BX, 100
+        MOV CX, 20   ; IF USE LOOP AND ALSO VALUE STORE IN CX THEN LOOP AUTOMATICALLY DECRIES THE CX
+       
+        SUBB:
+           ADD AX, BX
+           SUB BX, 5
+           
+           MOV A, AX 
+           LOOP SUBB
+        
+        
+            MOV AH, 4CH
+            INT 21H
+    MAIN ENDP
+END 
+
+24.
+; Question:
+; Write a program that takes a single digit input (0–9) from the user, converts it to binary, then reverses the binary bits and stores the result in a register. (Use SHL, RCR, and loop logic.)
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA
+
+.CODE
+    MAIN PROC   
+        MOV AX, @DATA  
+        MOV DS, AX
+        
+        
+        MOV AH,1
+        INT 21H
+        SUB AL, 30H  
+        
+        
+        MOV CH, 1
+          
+        REVERSE:
+            SHL AL, 1
+            RCR BL, 1
+            LOOP REVERSE
+            MOV AL, BL  
+            
+    MAIN ENDP
+END
+
+
+
+ 25. 
+ ; Question:
+; Write a program that takes a single digit input (0–9) from the user, converts it to binar, and stores the result in a register. (Use SHL, RCR, and loop logic.)
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA  
+    TXT DB "ENTER BINARY VALUE: $"  
+    NEWLINE DB 10, 13, "$"
+
+.CODE
+    MAIN PROC   
+        MOV AX, @DATA  
+        MOV DS, AX                
+        
+        
+        MOV AH, 9
+        LEA DX, TXT
+        INT 21H
+        
+        MOV BX,0
+         
+        
+        INPUT:
+            MOV AH, 1
+            INT 21H
+            CMP AL, 13
+            JE OUTPUT
+            
+            SUB AL, 30H
+            SHL BX, 1
+            OR BL, AL
+            LOOP INPUT
+        
+        
+        OUTPUT:  
+            MOV AH, 9
+            LEA DX, NEWLINE
+            INT 21H
+            MOV CX, 16
+            
+        OUTPUT_1:
+            SHL BX, 1
+            JNC ZERO
+            
+            MOV AH, 2
+            MOV DL,'1'
+            INT 21H
+            
+            JMP LOOP_
+            
+        ZERO:  
+            MOV AH, 2
+            MOV DL, '0'
+            INT 21H  
+            JMP LOOP_ 
+        LOOP_:  
+            LOOP OUTPUT_1
+            
+            
+    MAIN ENDP
+END
+
+
+ 26.
+ ; Question:
+; Write a program that takes a single digit input (0–9) from the user, converts it to binary, then reverses the binary bits and stores the result in a register. (Use SHR, RCR, and loop logic.)
+
+
+
+
+
+.MODEL SMALL
+.STACK 100H
+
+.DATA  
+    TXT DB "ENTER BINARY VALUE: $"  
+    NEWLINE DB 10, 13, "$"
+
+.CODE
+    MAIN PROC   
+        MOV AX, @DATA  
+        MOV DS, AX                
+        
+        
+        MOV AH, 9
+        LEA DX, TXT
+        INT 21H
+        
+        MOV BX,0
+         
+        
+        INPUT:
+            MOV AH, 1
+            INT 21H
+            CMP AL, 13
+            JE OUTPUT
+            
+            SUB AL, 30H
+            SHL BX, 1
+            OR BL, AL
+            LOOP INPUT
+        
+        
+        OUTPUT:  
+            MOV AH, 9
+            LEA DX, NEWLINE
+            INT 21H
+            MOV CX, 16
+            
+        OUTPUT_1:
+            SHR BX, 1
+            JNC ZERO
+            
+            MOV AH, 2
+            MOV DL,'1'
+            INT 21H
+            
+            JMP LOOP_
+            
+        ZERO:  
+            MOV AH, 2
+            MOV DL, '0'
+            INT 21H  
+            JMP LOOP_ 
+        LOOP_:  
+            LOOP OUTPUT_1
+            
+            
+    MAIN ENDP
+END
+
+
+ 27.
+ .MODEL SMALL
+.STACK 100H
+
+.DATA  
+    TXT DB "ENTER BINARY VALUE: $"  
+    NEWLINE DB 10, 13, "$"
+
+.CODE
+    MAIN PROC   
+        MOV AX, @DATA  
+        MOV DS, AX 
+        
+        MOV CL, 4
+        MOV BX, 0 ; CLEAR THE BX REGISTER 
+        
+        INPUT:
+            MOV AH, 1
+            INT 21H
+            CMP AL, 13
+            JE OUTPUT
+            
+            ; CHECK LETTER (A-F)
+            CMP AL, 41H
+            JGE LETTER
+            
+            ; IF LETTER CONDITION DOESN'T MATCH THEN THAT IS MUST BE NUMBER(0-9) 
+            SUB AL, 30H
+            JMP SHIFT
+            
+        LETTER:
+            SUB AL, 37H ; HERE 'A'-37H = 10, THAT IS THE VALUE OF A
+          
+        
+        SHIFT:
+            SHL BX, CL ; ADD 0000 FOR THE NEXT ITERATION
+            OR BL, AL  ; THEN ADD VALUE OF AL AND BL
+            JMP INPUT
+            
+        OUTPUT:  
+            MOV AH, 9
+            LEA DX, NEWLINE
+            INT 21H
+            MOV CX, 16
+            
+        OUTPUT_1:
+            SHL BX, 1 ; HERE DEVIDED BY 10 AND CHECK DIVISOR WHICH IS CARRY 
+            JNC ZERO  ; IF CARRY IS NOT 1 THEN REDIRECT TO ZERO LABEL
+            
+            ; IF DEVISOR IS NOT ZERO (1) AND THEN PRINT 1 
+            MOV AH, 2
+            MOV DL,'1'
+            INT 21H
+            
+            ; THEN REDIRECT FOR THE LOOP_ LEBEL
+            JMP LOOP_
+            
+        ZERO:  
+            MOV AH, 2
+            MOV DL, '0'
+            INT 21H  
+            JMP LOOP_ 
+        LOOP_:  
+            LOOP OUTPUT_1
+            
+            
+    MAIN ENDP
+END
+28.
+.MODEL SMALL       ; Define memory model
+.STACK 100H        ; Allocate stack space
+
+.DATA  
+    TXT DB "ENTER BINARY VALUE: $"     ; Message to prompt user input
+    NEWLINE DB 10, 13, "$"             ; Newline characters for formatting
+
+.CODE
+    MAIN PROC   
+        ; Initialize Data Segment
+        MOV AX, @DATA  
+        MOV DS, AX 
+        
+        MOV CL, 4          ; CL = 4, used for bit-shifting (each hex digit = 4 bits)
+        MOV BX, 0          ; BX will store the final hexadecimal value, clear it first
+        
+    INPUT:                 ; Input loop begins
+        MOV AH, 1          ; Function 1: Read a character from standard input
+        INT 21H            ; DOS interrupt to read character
+        CMP AL, 13         ; Check if Enter (carriage return) is pressed
+        JE OUTPUT          ; If Enter is pressed, jump to OUTPUT
+
+        ; Check if input is a letter (A-F or a-f)
+        CMP AL, 41H        ; Compare with ASCII 'A'
+        JGE LETTER         ; If input is A-F, go to LETTER
+
+        ; Else it's a digit (0-9)
+        SUB AL, 30H        ; Convert ASCII number to integer (e.g., '0' → 0, '9' → 9)
+        JMP SHIFT          ; Jump to shift operation
+
+    LETTER:
+        SUB AL, 37H        ; Convert ASCII 'A'-'F' to values 10-15
+                           ; 'A' (41H) - 37H = 0AH = 10
+        
+    SHIFT:
+        SHL BX, CL         ; Shift BX left by 4 bits to make space for new digit
+        OR BL, AL          ; Add new value (AL) to BX using OR
+        JMP INPUT          ; Repeat input loop
+
+    OUTPUT:  
+        ; Print newline for formatting
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H    
+        
+        MOV CX, 4          ; Set up loop to print 4 hex digits
+        MOV AH, 2          ; DOS function 2: Display character
+        
+    FOR:
+        MOV DL, BH         ; Copy high byte of BX to DL
+        SHR DL, 4          ; Get the leftmost 4 bits (highest nibble)
+        ROL BX, 4          ; Rotate BX left by 4 bits to move next nibble into place
+        
+        CMP DL, 10         ; If DL >= 10, it is a letter A-F
+        JGE UPPERLETTER
+
+        ADD DL, 30H        ; Convert value 0–9 to ASCII ('0'-'9')
+        INT 21H            ; Display character
+        JMP LOOP_          ; Continue loop
+
+    UPPERLETTER:
+        ADD DL, 37H        ; Convert value 10–15 to ASCII ('A'-'F')
+        INT 21H            ; Display character
+        JMP LOOP_          ; Continue loop
+
+    LOOP_:  
+        LOOP FOR           ; Loop until CX = 0 (4 times total)
+            
+    MAIN ENDP
+END
+29.
+.MODEL SMALL
+.STACK 100H
+
+.DATA  
+    NEWLINE DB 10, 13, "$"
+
+.CODE
+    MAIN PROC   
+        MOV AX, @DATA  
+        MOV DS, AX 
+        
+        MOV CL, 4             ; HEX ARE 4 BITS 
+        MOV BX, 0             
+        
+    INPUT:
+        MOV AH, 1             
+        INT 21H
+        CMP AL, 13            ; If PRESSED ENTER
+        JE OUTPUT
+        
+        CMP AL, 41H           ; CHECK CHARACTER A-F
+        JGE LETTER
+        
+        SUB AL, 30H           ; CONVERT
+        JMP SHIFT
+    
+    LETTER:
+        SUB AL, 37H           ; CONVERT 'A'-'F'
+    
+    SHIFT:
+        SHL BX, CL            ; SHIFT BX LEFT BY 4 BITS
+        OR BL, AL             ; SUM AL AND BL AND NEW VALUE STORE IN BL
+        JMP INPUT
+    
+    OUTPUT:  
+        MOV AH, 9
+        LEA DX, NEWLINE
+        INT 21H    
+        
+        
+        MOV CX, 4
+        MOV AH, 2
+    
+    FOR:
+        MOV DL, BL
+        AND DL, 0FH           
+                 
+        
+        CMP DL, 10
+        JGE UPPERCHRACTER
+    
+        ADD DL, 30H          
+        INT 21H
+        JMP LOOP_
+    
+    UPPERCHRACTER:
+        ADD DL, 37H          
+        INT 21H
+    
+    LOOP_:
+        SHR BX, 4            
+        LOOP FOR   
+    
+    MAIN ENDP
+END
