@@ -1,0 +1,399 @@
+1.
+
+.MODEL SMALL
+
+.STACK 100H
+
+.DATA
+
+    prompt db 'Enter a byte in hex: $'
+
+    result db 0Dh, 0Ah, 'Result: $'
+
+    newline db 0Dh, 0Ah, '$'  
+
+.CODE
+
+MAIN PROC
+
+
+    MOV AX, @DATA
+
+    MOV DS, AX
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, prompt
+
+    INT 21h
+
+    
+
+    MOV AH, 01h
+
+    INT 21h          
+
+    SUB AL, 30h      
+
+    CMP AL, 9
+
+    JLE DIGIT1
+
+    SUB AL, 7        
+
+DIGIT1:
+
+    SHL AL, 4        
+
+    MOV BL, AL       
+
+    MOV AH, 01h
+
+    INT 21h          
+
+    SUB AL, 30h      
+
+    CMP AL, 9
+
+    JLE DIGIT2
+
+    SUB AL, 7        
+
+DIGIT2:
+
+    OR BL, AL        
+
+    
+
+    AND BL, 7Fh     
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, result
+
+    INT 21h
+
+    
+
+    MOV DL, BL
+
+    SHR DL, 4        
+
+    CMP DL, 9
+
+    JLE NUM1
+
+    ADD DL, 7        
+
+NUM1:
+
+    ADD DL, 30h      
+
+    MOV AH, 02h
+
+    INT 21h          
+
+    MOV DL, BL
+
+    AND DL, 0Fh      
+
+    CMP DL, 9
+
+    JLE NUM2
+
+    ADD DL, 7        
+
+NUM2:
+
+    ADD DL, 30h      
+
+    MOV AH, 02h
+
+    INT 21h          
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, newline
+
+    INT 21h
+
+    
+
+    MOV AH, 4Ch
+
+    INT 21h
+
+MAIN ENDP
+
+END MAIN
+
+.........................................................
+2.
+.MODEL SMALL
+
+.STACK 100H
+
+.DATA
+
+    prompt db 'Enter a byte in hex: $'
+
+    result db 0Dh, 0Ah, 'Result: $'
+
+    newline db 0Dh, 0Ah, '$'
+
+.CODE
+
+MAIN PROC
+
+    MOV AX, @DATA
+
+    MOV DS, AX
+
+
+    MOV AH, 09h
+
+    LEA DX, prompt
+
+    INT 21h
+
+
+    MOV AH, 01h
+
+    INT 21h          
+
+    SUB AL, 30h      
+
+    CMP AL, 9
+
+    JLE DIGIT1
+
+    SUB AL, 7        
+
+DIGIT1:
+
+    SHL AL, 4        
+
+    MOV BL, AL       
+
+    MOV AH, 01h
+
+    INT 21h          
+
+    SUB AL, 30h      
+
+    CMP AL, 9
+
+    JLE DIGIT2
+
+    SUB AL, 7        
+
+DIGIT2:
+
+    OR BL, AL        
+
+    
+
+    NOT BL           
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, result
+
+    INT 21h
+
+    
+
+    MOV DL, BL
+
+    SHR DL, 4        
+
+    CMP DL, 9
+
+    JLE NUM1
+
+    ADD DL, 7       
+
+NUM1:
+
+    ADD DL, 30h      
+
+    MOV AH, 02h
+
+    INT 21h          
+
+    MOV DL, BL
+
+    AND DL, 0Fh      
+
+    CMP DL, 9
+
+    JLE NUM2
+
+    ADD DL, 7        
+
+NUM2:
+
+    ADD DL, 30h      
+
+    MOV AH, 02h
+
+    INT 21h          
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, newline
+
+    INT 21h
+
+   
+
+    MOV AH, 4Ch
+
+    INT 21h
+
+MAIN ENDP
+
+END MAIN
+
+..............................................
+3.
+
+.MODEL SMALL
+
+.STACK 100H
+
+.DATA
+
+    prompt db 'Enter a byte in hex: $'
+
+    result db 0Dh, 0Ah, 'Result: $'
+
+    newline db 0Dh, 0Ah, '$'  
+
+.CODE
+
+MAIN PROC
+
+    MOV AX, @DATA
+
+    MOV DS, AX
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, prompt
+
+    INT 21h
+
+    
+
+    MOV AH, 01h
+
+    INT 21h          
+
+    SUB AL, 30h      
+
+    CMP AL, 9
+
+    JLE DIGIT1
+
+    SUB AL, 7        
+
+DIGIT1:
+
+    SHL AL, 4        
+
+    MOV BL, AL       
+
+    MOV AH, 01h
+
+    INT 21h          
+
+    SUB AL, 30h      
+
+    CMP AL, 9
+
+    JLE DIGIT2
+
+    SUB AL, 7        
+
+DIGIT2:
+
+    OR BL, AL        
+
+
+    AND BL, 7Fh      
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, result
+
+    INT 21h
+
+    
+
+    MOV DL, BL
+
+    SHR DL, 4        
+
+    CMP DL, 9
+
+    JLE NUM1
+
+    ADD DL, 7        
+
+NUM1:
+
+    ADD DL, 30h      
+
+    MOV AH, 02h
+
+    INT 21h          
+
+    MOV DL, BL
+
+    AND DL, 0Fh      
+
+    CMP DL, 9
+
+    JLE NUM2
+
+    ADD DL, 7        
+
+NUM2:
+
+    ADD DL, 30h      
+
+    MOV AH, 02h
+
+    INT 21h          
+
+    
+
+    MOV AH, 09h
+
+    LEA DX, newline
+
+    INT 21h
+
+    
+    MOV AH, 4Ch
+
+    INT 21h
+
+MAIN ENDP
+
+END MAIN
