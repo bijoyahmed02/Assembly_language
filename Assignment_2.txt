@@ -1,0 +1,116 @@
+1.Print ASCII Codes 0 to 255
+.MODEL
+.STACK 100H
+.DATA
+       MSG1 DB 10,13,"$"
+.CODE
+MAIN PROC
+       MOV AX,@DATA
+       MOV DS,AX
+       
+       MOV CX,255
+       MOV AL,31h
+       TOP:
+           MOV AH,9
+           LEA DX,MSG1
+           INT 21H
+           
+           MOV DL,BL
+           MOV AH,2
+           INT 21H
+           
+           MOV DL, " "
+           MOV AH,2
+           INT 21H
+            
+           INC BL 
+           LOOP TOP
+           
+          MOV AH,4CH
+          INT 21H
+          
+          MAIN ENDP
+END MAIN
+
+2.that calculates the sum of the first 50 natural numbers (1 to 50) using a loop structure
+.MODEL SMALL
+
+.STACK 100H
+ 
+.DATA
+
+    sum DW 0
+
+    msg DB 0Dh, 0Ah, "Sum of first 50 natural numbers = $"
+ 
+.CODE
+
+MAIN PROC
+
+    MOV AX, @DATA
+
+    MOV DS, AX
+ 
+    MOV CX, 50
+
+    MOV BX, 1
+
+    MOV AX, 0
+ 
+ADD_LOOP:
+
+    ADD AX, BX
+
+    INC BX
+
+    LOOP ADD_LOOP
+ 
+    MOV sum, AX
+ 
+    MOV AH, 9
+
+    LEA DX, msg
+
+    INT 21H
+ 
+    MOV AX, sum
+
+    MOV BX, 10
+
+    MOV CX, 0
+ 
+DIV_LOOP:
+
+    XOR DX, DX
+
+    DIV BX
+
+    PUSH DX
+
+    INC CX
+
+    CMP AX, 0
+
+    JNE DIV_LOOP
+ 
+PRINT_LOOP:
+
+    POP DX
+
+    ADD DL, '0'
+
+    MOV AH, 2
+
+    INT 21H
+
+    LOOP PRINT_LOOP
+ 
+    MOV AH, 4CH
+
+    INT 21H
+
+MAIN ENDP
+
+END MAIN
+
+ 
